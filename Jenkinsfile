@@ -42,9 +42,9 @@ pipeline {
                 script {
                     // Run unit tests based on the operating system
                     if (isUnix()) {
-                        sh '. venv/bin/activate && pytest tests/'
+                        sh '. venv/bin/activate && pytest tests/ || { echo "pytest failed"; exit 1; }'
                     } else {
-                        bat 'venv\\Scripts\\activate && pytest tests\\'
+                        bat 'venv\\Scripts\\activate && pytest tests\\ || (echo pytest failed && exit /b 1)'
                     }
                 }
             }
