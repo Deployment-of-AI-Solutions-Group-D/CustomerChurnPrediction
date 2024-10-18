@@ -6,10 +6,10 @@ from sklearn.feature_extraction import DictVectorizer
 
 app = Flask(__name__)
 
-with open('C:/Users/user/OneDrive - Loyalist College/AI & DS/Sem 3/Deployment of AI Solns/CustomerChurnPrediction/model.pkl', 'rb') as f:
+with open('model.pkl', 'rb') as f:
     model = pickle.load(f)
 
-with open('C:/Users/user/OneDrive - Loyalist College/AI & DS/Sem 3/Deployment of AI Solns/CustomerChurnPrediction/dv.pkl', 'rb') as f:
+with open('dv.pkl', 'rb') as f:
     dv = pickle.load(f)
 
 @app.route('/')
