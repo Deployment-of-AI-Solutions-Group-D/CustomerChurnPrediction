@@ -38,17 +38,24 @@ pipeline {
         }
         
         stage('Run Unit Tests') {
-            steps {
-                script {
-                    // Run unit tests based on the operating system
-                    if (isUnix()) {
-                        sh '. venv/bin/activate && pytest tests/ || { echo "pytest failed"; exit 1; }'
-                    } else {
-                        bat 'venv\\Scripts\\activate && pytest tests\\ || (echo pytest failed && exit /b 1)'
-                    }
+        steps {
+            script {
+                // Run unit tests based on the operating system
+                if (isUnix()) {
+                sh '''
+                . venv/bin/activate
+                venv/bin/pytest tests/ || { echo "pytest failed"; exit 1; }
+                '''
+                } else {
+                bat '''
+                venv\\Scripts\\activate
+                venv\\Scripts\\pytest tests\\ || (echo pytest failed && exit /b 1)
+                '''
                 }
             }
         }
+    }
+
         
         stage('Start Application') {
             steps {
