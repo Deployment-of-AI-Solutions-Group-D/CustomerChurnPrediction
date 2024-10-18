@@ -75,7 +75,25 @@ pipeline {
                 }
             }
         }
-        
+        stage('Test Application') {
+            steps {
+                script {
+                    // Wait for a few seconds to ensure the app starts before testing
+                    sleep(5)
+                    
+                    // You can use curl or a simple Python script to test if the app is running
+                    if (isUnix()) {
+                        sh '''
+                        curl http://localhost:80/predict || echo "Application is not responding"
+                        '''
+                    } else {
+                        bat '''
+                        curl http://localhost:80/predict || echo "Application is not responding"
+                        '''
+                    }
+                }
+            }
+        }
         stage('Cleanup') {
             steps {
                 script {
