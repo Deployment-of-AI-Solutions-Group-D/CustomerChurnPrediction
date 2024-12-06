@@ -1,0 +1,30 @@
+---
+- name: Deploy Flask Application
+  hosts: webservers  # Define your webserver group in the inventory file
+  become: yes
+  tasks:
+    - name: Ensure Python3 and virtualenv are installed
+      apt:
+        name:
+          - python3
+          - python3-venv
+        state: present
+
+    - name: Create virtual environment if not already present
+      command:
+        cmd: python3 -m venv /path/to/your/project/venv
+        creates: /path/to/your/project/venv
+
+    - name: Install required Python packages
+      pip:
+        requirements: /path/to/your/project/requirements.txt
+        virtualenv: /path/to/your/project/venv
+
+    - name: Start Flask app in the background
+      shell: |
+        nohup python3 /path/to/your/project/app.py > /path/to/your/project/nohup.out 2>&1 &
+      args:
+        chdir: /path/to/your/project
+
+    - name: Ensure Flask app is running
+      command: ps aux | grep 'python3 app.py'
