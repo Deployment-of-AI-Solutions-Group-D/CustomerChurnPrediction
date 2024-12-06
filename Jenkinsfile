@@ -30,6 +30,7 @@ pipeline {
                     } else {
                         // On Windows systems, set up a virtual environment and install dependencies
                         bat '''
+                        echo %PATH%
                         python --version
                         pip --version
                         python -m venv venv
