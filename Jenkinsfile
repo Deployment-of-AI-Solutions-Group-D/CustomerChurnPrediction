@@ -9,8 +9,8 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                // Clone the Git repository
-                git url: 'https://github.com/Deployment-of-AI-Solutions-Group-D/CustomerChurnPrediction.git', branch: 'master'
+                // Clone the Git repository from the specified branch
+                git url: 'https://github.com/Deployment-of-AI-Solutions-Group-D/CustomerChurnPrediction.git', branch: 'jini_zacharias'
             }
         }
         
@@ -21,6 +21,8 @@ pipeline {
                     if (isUnix()) {
                         // On Unix/Linux systems, set up a virtual environment and install dependencies
                         sh '''
+                        python3 --version
+                        pip3 --version
                         python3 -m venv venv
                         . venv/bin/activate
                         pip install -r requirements.txt
@@ -28,8 +30,10 @@ pipeline {
                     } else {
                         // On Windows systems, set up a virtual environment and install dependencies
                         bat '''
+                        python --version
+                        pip --version
                         python -m venv venv
-                        venv\\Scripts\\activate
+                        call venv\\Scripts\\activate
                         pip install -r requirements.txt
                         '''
                     }
@@ -38,24 +42,23 @@ pipeline {
         }
         
         stage('Run Unit Tests') {
-        steps {
-            script {
-                // Run unit tests based on the operating system
-                if (isUnix()) {
-                sh '''
-                . venv/bin/activate
-                venv/bin/pytest tests/ || { echo "pytest failed"; exit 1; }
-                '''
-                } else {
-                bat '''
-                venv\\Scripts\\activate
-                venv\\Scripts\\pytest tests\\ || (echo pytest failed && exit /b 1)
-                '''
+            steps {
+                script {
+                    // Run unit tests based on the operating system
+                    if (isUnix()) {
+                        sh '''
+                        . venv/bin/activate
+                        venv/bin/pytest tests/ || { echo "pytest failed"; exit 1; }
+                        '''
+                    } else {
+                        bat '''
+                        call venv\\Scripts\\activate
+                        venv\\Scripts\\pytest tests\\ || (echo pytest failed && exit /b 1)
+                        '''
+                    }
                 }
             }
         }
-    }
-
         
         stage('Start Application') {
             steps {
@@ -75,6 +78,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Test Application') {
             steps {
                 script {
@@ -94,6 +98,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Cleanup') {
             steps {
                 script {
