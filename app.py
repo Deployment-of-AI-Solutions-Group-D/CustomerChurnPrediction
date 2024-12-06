@@ -55,5 +55,15 @@ def predict_get():
 def ui():
     return app.send_static_file('dashboard.html')
 
+def create_app():
+    app = Flask(__name__)
+    app.config['TESTING'] = True  # Enable testing mode
+
+    @app.route('/ping')
+    def ping():
+        return "pong"
+
+    return app
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8085, debug=False)
