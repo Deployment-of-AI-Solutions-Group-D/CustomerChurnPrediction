@@ -33,8 +33,7 @@ pipeline {
                         python --version
                         pip --version
                         python -m venv venv
-                        call venv\\Scripts\\activate
-                        pip install -r requirements.txt
+                        call venv\\Scripts\\activate && pip install -r requirements.txt
                         '''
                     }
                 }
@@ -52,8 +51,7 @@ pipeline {
                         '''
                     } else {
                         bat '''
-                        call venv\\Scripts\\activate
-                        venv\\Scripts\\pytest tests\\ || (echo pytest failed && exit /b 1)
+                        call venv\\Scripts\\activate && venv\\Scripts\\pytest tests\\ || (echo pytest failed && exit /b 1)
                         '''
                     }
                 }
@@ -92,7 +90,7 @@ pipeline {
                         '''
                     } else {
                         bat '''
-                        curl http://localhost:80/ui || echo "Application is not responding"
+                        curl http://localhost:80/ui || echo Application is not responding
                         '''
                     }
                 }
@@ -106,7 +104,7 @@ pipeline {
                     if (isUnix()) {
                         sh 'pkill -f app.py || true' // Stop the Flask app
                     } else {
-                        bat 'taskkill /F /IM python.exe || echo "No running instance of app.py to kill"'
+                        bat 'taskkill /F /IM python.exe || echo No running instance of app.py to kill'
                     }
                 }
             }
